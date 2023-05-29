@@ -2,7 +2,7 @@
 
 Default keybind is: `Ctrl + Shift + .` 
 
-(note the code says `>` as I am on UK keyboard, not sure if this works elsewhere, will add support for changing keybind later)
+Note: the code says `>` as I am on UK keyboard, not sure if this works elsewhere, will add support for changing keybind later.
 
 What does this do?:
 
