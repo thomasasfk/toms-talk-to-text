@@ -43,9 +43,17 @@ def handle_key_event(e: keyboard.KeyboardEvent) -> None:
 
 def handle_recording() -> None:
     frames = []
+    start_time = time.time()
+
     while RECORDING:
         data = stream.read(CHUNK)
         frames.append(data)
+
+        elapsed_time = time.time() - start_time
+        max_seconds = int(os.getenv('MAX_RECORDING_SECONDS', '300')) # 5 minutes = 300 seconds
+        if elapsed_time >= max_seconds:
+            print('Recording time limit reached.')
+            break
     print('Recording stopped.')
 
     filename = save_audio(frames)
