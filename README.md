@@ -22,7 +22,7 @@ Setup:
 cp .env.example .env
 ```
 
-- Add OPENAI_API_KEY
+- Add [OPENAI_API_KEY](https://platform.openai.com/account/api-keys)
 ```bash
 python -m venv .venv
 . .venv/bin/activate
