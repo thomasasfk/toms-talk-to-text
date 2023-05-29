@@ -42,6 +42,8 @@ def handle_key_event(e: keyboard.KeyboardEvent) -> None:
 
 
 def handle_recording() -> None:
+    global RECORDING
+    
     frames = []
     start_time = time.time()
 
