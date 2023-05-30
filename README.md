@@ -21,14 +21,20 @@ Setup:
 ```bash
 cp .env.example .env
 ```
-
 - Add [OPENAI_API_KEY](https://platform.openai.com/account/api-keys)
+
+- Install dependencies
 ```bash
 python -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
-- Run the script
+- Run the script or compile executable
 ```bash
 python main.py
+```
+
+- Or compile executable
+```bash
+.venv/bin/pyinstaller main.py --onefile --icon=icon.ico main.py # add --noconsole to hide console
 ```

@@ -7,3 +7,4 @@ pyaudio
 openai
 pyperclip
 pyautogui
+pyinstaller
