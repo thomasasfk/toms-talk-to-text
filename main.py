@@ -23,10 +23,6 @@ CHANNELS = 1
 RATE = 44100
 
 audio = pyaudio.PyAudio()
-stream = audio.open(
-    format=FORMAT, channels=CHANNELS,
-    rate=RATE, input=True, frames_per_buffer=CHUNK,
-)
 
 
 def handle_key_event(e: keyboard.KeyboardEvent) -> None:
@@ -44,6 +40,10 @@ def handle_key_event(e: keyboard.KeyboardEvent) -> None:
 def handle_recording() -> None:
     frames = []
     start_time = time.time()
+    stream = audio.open(
+        format=FORMAT, channels=CHANNELS,
+        rate=RATE, input=True, frames_per_buffer=CHUNK,
+    )
 
     while RECORDING:
         data = stream.read(CHUNK)
