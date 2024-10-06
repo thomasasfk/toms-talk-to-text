@@ -2,9 +2,9 @@
 
 A compact tool to convert speech to text with a single keybind.
 
-## Demo
+## Image
 
-[todo]
+![image](https://github.com/user-attachments/assets/61123245-2f7b-43cb-a5e0-0213c869e36a)
 
 ## Features
 
