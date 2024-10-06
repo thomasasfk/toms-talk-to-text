@@ -18,9 +18,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
     - name: Install dependencies
@@ -31,7 +31,7 @@ jobs:
     - name: Build executable
       run: pyinstaller --onefile --icon=icon.ico --add-data "icon.ico;." --noconsole -n=tttt main.py
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: tttt
         path: ./dist/tttt.exe
@@ -40,16 +40,18 @@ jobs:
     needs: build
     if: github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: tttt
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
     - name: Install dependencies
@@ -69,24 +71,14 @@ jobs:
         git push
         git tag v$new_version
         git push origin v$new_version
-        echo "::set-output name=new_version::$new_version"
+        echo "new_version=$new_version" >> $env:GITHUB_OUTPUT
       shell: pwsh
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ steps.bump_version.outputs.new_version }}
-        release_name: Release v${{ steps.bump_version.outputs.new_version }}
-        draft: false
-        prerelease: false
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./tttt.exe
-        asset_name: tttt.exe
-        asset_content_type: application/octet-stream
+      run: |
+        gh release create v${{ steps.bump_version.outputs.new_version }} `
+          --title "Release v${{ steps.bump_version.outputs.new_version }}" `
+          --notes "Release notes for version ${{ steps.bump_version.outputs.new_version }}" `
+          ./tttt.exe
+      shell: pwsh
