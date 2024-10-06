@@ -1,0 +1,71 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: Build executable
+      run: pyinstaller --onefile --icon=icon.ico --add-data "icon.ico;." --noconsole -n=tttt main.py
+
+    - name: Get version
+      id: get_version
+      run: |
+        $version = (Get-Content version.txt).Trim()
+        echo "::set-output name=version::$version"
+      shell: pwsh
+
+    - name: Increment version
+      id: increment_version
+      run: |
+        $version = "${{ steps.get_version.outputs.version }}"
+        $newVersion = [Version]::new($version).ToString(3)
+        Set-Content -Path version.txt -Value $newVersion
+        echo "::set-output name=new_version::$newVersion"
+      shell: pwsh
+
+    - name: Commit version update
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add version.txt
+        git commit -m "Bump version to ${{ steps.increment_version.outputs.new_version }}"
+        git push
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.increment_version.outputs.new_version }}
+        release_name: Release v${{ steps.increment_version.outputs.new_version }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/tttt.exe
+        asset_name: tttt.exe
+        asset_content_type: application/octet-stream

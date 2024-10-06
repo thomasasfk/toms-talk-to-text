@@ -1,40 +1,58 @@
-## toms-talk-to-text
+# Tom's Talk-to-Text
 
-Default keybind is: `Ctrl + Shift + .` 
+A compact tool to convert speech to text with a single keybind.
 
-Note: the code says `>` as I am on UK keyboard, not sure if this works elsewhere, will add support for changing keybind later.
+## Demo
 
-What does this do?:
+[todo]
 
-- Press keybind (start recording)
-- Monologue into your microphone
-- Press keybind (stop recording)
-- Wait a few seconds
-- What you said will be pasted as text
+## Features
 
----
+- Convert speech to text with a single hotkey (`Ctrl + Shift + >`)
+- Powered by OpenAI's Whisper API
+- Auto-copy transcription to clipboard
+- Optional auto-paste functionality
 
-Setup:
+## Setup
 
-- Install Python 3.10 (pyenv recommended)
-- Copy `.env.example` to `.env`
-```bash
-cp .env.example .env
-```
-- Add [OPENAI_API_KEY](https://platform.openai.com/account/api-keys)
+1. Download `tttt.exe` from the releases page
+2. Run `tttt.exe`
+3. Configure settings on first run or by clicking the "Settings" button
+4. Press `Ctrl + Shift + >` to start/stop recording
 
-- Install dependencies
-```bash
-python -m venv .venv
-. .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-- Run the script or compile executable
-```bash
-python main.py
-```
+## Usage
 
-- Or compile executable
-```bash
-.venv/bin/pyinstaller main.py --onefile --icon=icon.ico main.py # add --noconsole to hide console
-```
+1. Press `Ctrl + Shift + >` to start recording
+2. Speak clearly into your microphone
+3. Press `Ctrl + Shift + >` again to stop recording and start transcription
+4. The transcribed text will be copied to your clipboard (and optionally pasted)
+
+## Configuration
+
+- Click the "Settings" button to configure:
+  - OpenAI API Key
+  - Max recording duration
+
+## Building from Source (Optional)
+
+1. Install Python 3.10
+2. Clone the repository:
+   ```
+   git clone https://github.com/thomasasfk/toms-talk-to-text.git
+   cd toms-talk-to-text
+   ```
+3. Install dependencies:
+   ```
+   python -m venv .venv
+   . .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
+   pip install -r requirements.txt
+   ```
+4. Compile executable:
+   ```
+   pyinstaller --onefile --icon=icon.ico --add-data "icon.ico;." --noconsole -n=tttt main.py
+   ```
+5. Find the executable in the `dist` folder
+
+## Note
+
+Settings are stored in a local `settings.json` file in the user's data directory.

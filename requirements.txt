@@ -1,10 +1,9 @@
-pre-commit
-pytest
-pytest-mock
+openai==0.28
 python-dotenv
-keyboard
-pyaudio
-openai
+pyinstaller
 pyperclip
 pyautogui
-pyinstaller
+keyboard
+pyaudio
+appdirs
+tk
