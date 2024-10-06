@@ -84,7 +84,7 @@ class TalkToTextApp:
     def toggle_recording(self, e: keyboard.KeyboardEvent = None) -> None:
         if all([e.name == '>', keyboard.is_pressed('ctrl'), keyboard.is_pressed('shift')]):
             self.recording = not self.recording
-            self.status_var.set('Recording started...' if self.recording else 'Recording stopped.')
+            self.status_var.set('Recording started...' if self.recording else 'Recording stopped')
             if self.recording:
                 threading.Thread(target=self.record_and_transcribe).start()
 
@@ -117,7 +117,7 @@ class TalkToTextApp:
                     return
 
         pyperclip.copy(text)
-        self.status_var.set('Transcription complete. Copied to clipboard.')
+        self.status_var.set('Transcription complete')
         if self.paste_after_transcribe.get():
             pyautogui.hotkey('ctrl', 'v')
         os.remove(temp_file.name)
