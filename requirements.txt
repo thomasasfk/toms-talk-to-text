@@ -6,4 +6,5 @@ pyautogui
 keyboard
 pyaudio
 appdirs
+flask
 tk
