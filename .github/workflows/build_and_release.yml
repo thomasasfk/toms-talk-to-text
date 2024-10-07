@@ -58,27 +58,30 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install semver
-    - name: Bump version and push tag
-      id: bump_version
+    - name: Determine next version
+      id: next_version
+      run: |
+        $latest_tag = git describe --tags --abbrev=0 2>$null
+        if (-not $latest_tag) {
+          $latest_tag = "v0.0.0"
+        }
+        $latest_version = $latest_tag -replace '^v', ''
+        $new_version = python -c "import semver; print(str(semver.VersionInfo.parse('$latest_version').bump_${{ github.event.inputs.release_type }}()))"
+        echo "new_version=$new_version" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+    - name: Create and push tag
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        $current_version = Get-Content version.txt
-        $new_version = python -c "import semver; print(str(semver.VersionInfo.parse('$current_version').bump_${{ github.event.inputs.release_type }}()))"
-        Set-Content -Path version.txt -Value $new_version
-        git add version.txt
-        git commit -m "Bump version to $new_version"
-        git push
-        git tag v$new_version
-        git push origin v$new_version
-        echo "new_version=$new_version" >> $env:GITHUB_OUTPUT
+        git tag v${{ steps.next_version.outputs.new_version }}
+        git push origin v${{ steps.next_version.outputs.new_version }}
       shell: pwsh
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create v${{ steps.bump_version.outputs.new_version }} `
-          --title "Release v${{ steps.bump_version.outputs.new_version }}" `
-          --notes "Release notes for version ${{ steps.bump_version.outputs.new_version }}" `
+        gh release create v${{ steps.next_version.outputs.new_version }} `
+          --title "Release v${{ steps.next_version.outputs.new_version }}" `
+          --notes "Release notes for version ${{ steps.next_version.outputs.new_version }}" `
           ./tttt.exe
       shell: pwsh
