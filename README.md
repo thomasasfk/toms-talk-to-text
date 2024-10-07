@@ -2,10 +2,6 @@
 
 A compact tool to convert speech to text, available as a standalone executable and a Flask web application.
 
-## Image
-
-![image](https://github.com/user-attachments/assets/61123245-2f7b-43cb-a5e0-0213c869e36a)
-
 ## Features
 
 - Convert speech to text
@@ -15,6 +11,8 @@ A compact tool to convert speech to text, available as a standalone executable a
 - Web interface for easy access (Flask version)
 
 ## Standalone Version
+
+![image](https://github.com/user-attachments/assets/61123245-2f7b-43cb-a5e0-0213c869e36a)
 
 ### Setup
 
@@ -37,6 +35,8 @@ A compact tool to convert speech to text, available as a standalone executable a
   - Max recording duration
 
 ## Flask Web Application Version
+
+![image](https://github.com/user-attachments/assets/974cf085-fc8f-4c75-9cc0-ac58c762c6cf)
 
 ### Setup
 
